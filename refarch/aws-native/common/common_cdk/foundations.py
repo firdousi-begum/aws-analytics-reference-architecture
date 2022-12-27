@@ -104,7 +104,9 @@ class DataLakeFoundations(NestedStack):
             audit_table=self.__curated_s3_bucket.bucket_name
         )
 
-        self.__raw_glue_db.location_uri = 's3:////'+ self.__raw_s3_bucket.bucket_name
+        # self.__raw_glue_db.location_uri = 's3:////'+ self.__raw_s3_bucket.bucket_name
+        self.__raw_glue_db.__setattr__('location_uri','s3:////'+ self.__raw_s3_bucket.bucket_name )
+        
 
 
         # implement lake formation permissions
