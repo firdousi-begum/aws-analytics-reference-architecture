@@ -103,10 +103,12 @@ class DataLakeFoundations(NestedStack):
 
         # implement lake formation permissions
         # lfAdmin = LakeFormationAdmin(self,'DataLakeAdmin')
-        LakeFormationS3Location(self,'S3LocationRaw', s3_location=self.__raw_s3_bucket)
-        LakeFormationS3Location(self,'S3LocationClean', s3_location=self.__clean_s3_bucket)
-        LakeFormationS3Location(self,'S3LocationTransform', s3_location=self.__curated_s3_bucket)
-        LakeFormationS3Location(self,'S3LocationAudit', s3_location=self.__logs_s3_bucket)
+        LakeFormationS3Location(self,'S3LocationRaw', s3_location={
+            "bucket_name": self.__raw_s3_bucket.bucket_name}
+        )
+        # LakeFormationS3Location(self,'S3LocationClean', s3_location=self.__clean_s3_bucket)
+        # LakeFormationS3Location(self,'S3LocationTransform', s3_location=self.__curated_s3_bucket)
+        # LakeFormationS3Location(self,'S3LocationAudit', s3_location=self.__logs_s3_bucket)
 
         # the vpc used for the overall data lake (same vpc, different subnet for modules)
         self.__vpc = Vpc(self, 'Vpc')
