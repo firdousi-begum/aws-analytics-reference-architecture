@@ -6,7 +6,7 @@ from aws_cdk import NestedStack
 from aws_cdk.aws_ec2 import GatewayVpcEndpointAwsService, SubnetSelection, SubnetType, Vpc, InterfaceVpcEndpointAwsService
 from aws_cdk.aws_glue_alpha import Database
 from aws_cdk.aws_iam import Group
-from aws_analytics_reference_architecture import DataLakeCatalog, DataLakeStorage
+from aws_analytics_reference_architecture import DataLakeCatalog, DataLakeStorage, LakeFormationAdmin, LakeFormationS3Location
 from common_cdk.audit_trail_glue import AuditTrailGlue
 
 from common.common_cdk.auto_empty_bucket import AutoEmptyBucket
@@ -101,6 +101,13 @@ class DataLakeFoundations(NestedStack):
             audit_table=self.__curated_s3_bucket.bucket_name
         )
 
+        # implement lake formation permissions
+        lfAdmin = LakeFormationAdmin(self,'DataLakeAdmin')
+        LakeFormationS3Location(self,'S3LocationRaw', s3_location=self.__raw_s3_bucket)
+        LakeFormationS3Location(self,'S3LocationClean', s3_location=self.__clean_s3_bucket)
+        LakeFormationS3Location(self,'S3LocationTransform', s3_location=self.__curated_s3_bucket)
+        LakeFormationS3Location(self,'S3LocationAudit', s3_location=self.__logs_s3_bucket)
+
         # the vpc used for the overall data lake (same vpc, different subnet for modules)
         self.__vpc = Vpc(self, 'Vpc')
         self.__public_subnets = self.__vpc.select_subnets(subnet_type=SubnetType.PUBLIC)
@@ -114,3 +121,5 @@ class DataLakeFoundations(NestedStack):
         self.__admin_group = Group(self, 'GroupAdmins', group_name='ara-admins')
         self.__analysts_group = Group(self, 'GroupAnalysts', group_name='ara-analysts')
         self.__developers_group = Group(self, 'GroupDevelopers', group_name='ara-developers')
+
+       
