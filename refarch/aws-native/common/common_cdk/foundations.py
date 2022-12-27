@@ -103,8 +103,10 @@ class DataLakeFoundations(NestedStack):
 
         # implement lake formation permissions
         # lfAdmin = LakeFormationAdmin(self,'DataLakeAdmin')
-        LakeFormationS3Location(self,'S3LocationRaw', s3_location={
-            "bucket_name": self.__raw_s3_bucket.bucket_name}
+        LakeFormationS3Location(self,'S3LocationRaw', 
+            s3_location={
+                "bucket_name": self.__raw_s3_bucket.bucket_name},
+            kms_key_id= self.__raw_s3_bucket.encryption_key.key_id
         )
         # LakeFormationS3Location(self,'S3LocationClean', s3_location=self.__clean_s3_bucket)
         # LakeFormationS3Location(self,'S3LocationTransform', s3_location=self.__curated_s3_bucket)
