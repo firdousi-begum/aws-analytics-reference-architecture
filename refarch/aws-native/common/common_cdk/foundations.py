@@ -5,7 +5,7 @@ from constructs import Construct
 from aws_cdk import NestedStack
 from aws_cdk.aws_ec2 import GatewayVpcEndpointAwsService, SubnetSelection, SubnetType, Vpc, InterfaceVpcEndpointAwsService
 from aws_cdk.aws_glue_alpha import Database
-from aws_cdk.aws_iam import Group
+from aws_cdk.aws_iam import Group, Role
 from aws_analytics_reference_architecture import DataLakeCatalog, DataLakeStorage, LakeFormationAdmin, LakeFormationS3Location
 from common_cdk.audit_trail_glue import AuditTrailGlue
 
@@ -70,6 +70,10 @@ class DataLakeFoundations(NestedStack):
     @property
     def developers_group(self):
         return self.__developers_group
+    
+    @property
+    def lf_admin_role(self):
+        return self.__lf_admin_role
 
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
@@ -103,6 +107,7 @@ class DataLakeFoundations(NestedStack):
 
         # implement lake formation permissions
         # lfAdmin = LakeFormationAdmin(self,'DataLakeAdmin')
+        # self.__lf_admin_role = Role(self, 'lf-admin-role',))
         LakeFormationS3Location(self,'S3LocationRaw', 
             s3_location={
                 "bucket_name": self.__raw_s3_bucket.bucket_name,
@@ -110,10 +115,29 @@ class DataLakeFoundations(NestedStack):
                 },
             kms_key_id= self.__raw_s3_bucket.encryption_key.key_id
         )
-        # LakeFormationS3Location(self,'S3LocationClean', s3_location=self.__clean_s3_bucket)
-        # LakeFormationS3Location(self,'S3LocationTransform', s3_location=self.__curated_s3_bucket)
-        # LakeFormationS3Location(self,'S3LocationAudit', s3_location=self.__logs_s3_bucket)
+        LakeFormationS3Location(self,'S3LocationClean', 
+            s3_location={
+                "bucket_name": self.__clean_s3_bucket.bucket_name,
+                "object_key": ""
+                },
+            kms_key_id= self.__clean_s3_bucket.encryption_key.key_id
+        )
+        LakeFormationS3Location(self,'S3LocationTransform', 
+            s3_location={
+                "bucket_name": self.__curated_s3_bucket.bucket_name,
+                "object_key": ""
+                },
+            kms_key_id= self.__curated_s3_bucket.encryption_key.key_id
+        )
+        LakeFormationS3Location(self,'S3LocationAudit', 
+            s3_location={
+                "bucket_name": self.__logs_s3_bucket.bucket_name,
+                "object_key": ""
+                },
+            kms_key_id= self.__logs_s3_bucket.encryption_key.key_id
+        )
 
+        
         # the vpc used for the overall data lake (same vpc, different subnet for modules)
         self.__vpc = Vpc(self, 'Vpc')
         self.__public_subnets = self.__vpc.select_subnets(subnet_type=SubnetType.PUBLIC)
