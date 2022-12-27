@@ -54,8 +54,8 @@ if app.node.try_get_context('EnableCICD') == 'true':
     deploy_envs.append(dev_env)
 
     # Comment out to deploy only to dev environment
-    prod_env = make_env(app, 'PROD')
-    deploy_envs.append(prod_env)
+    # prod_env = make_env(app, 'PROD')
+    # deploy_envs.append(prod_env)
 
     PipelineStack(app, "araPipelineStack",
                   env={

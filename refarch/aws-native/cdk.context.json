@@ -1,20 +1,20 @@
 {
   "CICD": {
     "name": "cicd",
-    "region": "<CICD_REGION>",
-    "account": "<CICD_ACCOUNT>"
+    "region": "eu-west-1",
+    "account": "207068666668"
   },
   "DEV": {
     "name": "dev",
     "region": "eu-west-1",
-    "account": "<DEV_ACCOUNT>"
+    "account": "207068666668"
   },
   "PROD": {
     "name": "prod",
     "region": "eu-west-1",
-    "account": "<PROD_ACCOUNT>"
+    "account": "207068666668"
   },
-  "availability-zones:account=<DEV_ACCOUNT>:region=eu-west-1": [
+  "availability-zones:account=207068666668:region=eu-west-1": [
     "eu-west-1a",
     "eu-west-1b",
     "eu-west-1c"

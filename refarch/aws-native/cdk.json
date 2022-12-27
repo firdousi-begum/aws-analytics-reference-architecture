@@ -3,14 +3,14 @@
   "context": {
     "aws-cdk:enableDiffNoFail": "true",
     "EnableBatch": "true",
-    "EnableDWH": "true",
-    "EnableDataviz": "true",
-    "EnableStreaming": "true",
-    "EnableCICD": "false",
+    "EnableDWH": "false",
+    "EnableDataviz": "false",
+    "EnableStreaming": "false",
+    "EnableCICD": "true",
     "CICDParameters": {
-      "RepositoryName": "<REPOSITORY_NAME>",
-      "RepositoryBranch": "<REPOSITORY_BRANCH>",
-      "ConnectionArn": "<CONNECTION_ARN>"
+      "RepositoryName": "firdousi-begum/aws-analytics-reference-architecture",
+      "RepositoryBranch": "fb-lake",
+      "ConnectionArn": "arn:aws:codestar-connections:eu-west-1:207068666668:connection/db5d7cfc-ab26-4594-bff3-ed6e313d9d73"
     },
     "QuickSightUsername": "<QUICKSIGHT_USERNAME>",
     "QuickSightIdentityRegion": "<QUICKSIGHT_IDENTITY_REGION>",
