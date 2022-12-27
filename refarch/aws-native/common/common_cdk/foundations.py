@@ -129,15 +129,17 @@ class DataLakeFoundations(NestedStack):
                 },
             kms_key_id= self.__curated_s3_bucket.encryption_key.key_id
         )
-        LakeFormationS3Location(self,'S3LocationAudit', 
-            s3_location={
-                "bucket_name": self.__logs_s3_bucket.bucket_name,
-                "object_key": ""
-                },
-            kms_key_id= self.__logs_s3_bucket.encryption_key.key_id
-        )
 
-        
+        # Below code gives error 'NoneType' object has no attribute 'key_id'
+        # LakeFormationS3Location(self,'S3LocationAudit', 
+        #     s3_location={
+        #         "bucket_name": self.__logs_s3_bucket.bucket_name,
+        #         "object_key": ""
+        #         },
+        #     kms_key_id= self.__logs_s3_bucket.encryption_key.key_id
+        # )
+
+
         # the vpc used for the overall data lake (same vpc, different subnet for modules)
         self.__vpc = Vpc(self, 'Vpc')
         self.__public_subnets = self.__vpc.select_subnets(subnet_type=SubnetType.PUBLIC)
