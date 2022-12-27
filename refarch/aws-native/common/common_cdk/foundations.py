@@ -104,10 +104,6 @@ class DataLakeFoundations(NestedStack):
             audit_table=self.__curated_s3_bucket.bucket_name
         )
 
-        # self.__raw_glue_db.location_uri = 's3:////'+ self.__raw_s3_bucket.bucket_name
-        self.__raw_glue_db.__setattr__('location_uri','s3:////'+ self.__raw_s3_bucket.bucket_name )
-        
-
 
         # implement lake formation permissions
         # lfAdmin = LakeFormationAdmin(self,'DataLakeAdmin')
@@ -133,6 +129,8 @@ class DataLakeFoundations(NestedStack):
                 },
             kms_key_id= self.__curated_s3_bucket.encryption_key.key_id
         )
+
+        
 
         # Below code gives error 'NoneType' object has no attribute 'key_id'
         # LakeFormationS3Location(self,'S3LocationAudit', 
