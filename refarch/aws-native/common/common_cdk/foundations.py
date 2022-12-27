@@ -78,6 +78,9 @@ class DataLakeFoundations(NestedStack):
     def __init__(self, scope: Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
+          # implement the glue data catalog databases used in the data lake
+        catalog = DataLakeCatalog(self, 'DataLakeCatalog')
+        self.__raw_glue_db = catalog.raw_database
         self.__clean_glue_db = catalog.clean_database
         self.__curated_glue_db = catalog.transform_database
         self.__audit_glue_db = Database(self, 'AuditGlueDB', database_name='ara_audit_data_' + self.account)
@@ -101,12 +104,8 @@ class DataLakeFoundations(NestedStack):
             audit_table=self.__curated_s3_bucket.bucket_name
         )
 
-         # implement the glue data catalog databases used in the data lake
-        catalog = DataLakeCatalog(self, 'DataLakeCatalog')
-        self.__raw_glue_db = catalog.raw_database
-        self.__raw_glue_db.location_uri = self.__raw_s3_bucket.bucket_arn
+        self.__raw_glue_db.location_uri = 's3:////'+ self.__raw_s3_bucket.bucket_name
 
-        
 
         # implement lake formation permissions
         # lfAdmin = LakeFormationAdmin(self,'DataLakeAdmin')
